@@ -1,10 +1,13 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { Resource } from '../entities/resource.entity';
 import { Role } from '../entities/role.entity';
 import { Permission } from '../entities/permission.entity';
+import { User } from 'src/modules/users/external-system/entities/user.entity';
 import { Action } from '../../business/entities/Action';
+import * as bcrypt from 'bcrypt';
 
 const RBAC_CONFIG = {
   resources: [
@@ -63,10 +66,15 @@ export class RbacSeeder implements OnModuleInit {
 
     @InjectRepository(Permission)
     private readonly permissionRepo: Repository<Permission>,
+
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>,
+
+    private readonly configService: ConfigService,
   ) {}
 
   async onModuleInit() {
-    
+    await this.seed();
   }
 
   private async seed() {
@@ -107,6 +115,40 @@ export class RbacSeeder implements OnModuleInit {
       }
     }
 
+    await this.seedAdminUser();
     this.logger.log('RBAC seeded successfully');
+  }
+
+  private async seedAdminUser() {
+    const existingAdmin = await this.userRepo.findOne({
+      where: { email: this.configService.get<string>('ADMIN_EMAIL', 'admin@admin.com') },
+    });
+
+    if (existingAdmin) {
+      this.logger.log('Admin user already exists, skipping...');
+      return;
+    }
+
+    const adminRole = await this.roleRepo.findOne({ where: { name: 'admin' } });
+    if (!adminRole) {
+      this.logger.error('Admin role not found, cannot create admin user');
+      return;
+    }
+
+    const adminUser = this.userRepo.create({
+      email: this.configService.get<string>('ADMIN_EMAIL', 'admin@admin.com'),
+      password: bcrypt.hashSync(
+        this.configService.get<string>('ADMIN_PASSWORD', 'Admin123!'),
+        10,
+      ),
+      firstName: 'Admin',
+      lastName: 'System',
+      isVerified: true,
+      role: adminRole,
+      roleId: adminRole.id,
+    });
+
+    await this.userRepo.save(adminUser);
+    this.logger.log('Admin user created successfully');
   }
 }
