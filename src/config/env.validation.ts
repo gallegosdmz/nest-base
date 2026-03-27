@@ -13,4 +13,8 @@ export const envValidationSchema = Joi.object({
 
   // App
   PORT: Joi.number().default(3000),
+
+  // Admin seed (optional)
+  ADMIN_EMAIL: Joi.string().email().default('admin@admin.com'),
+  ADMIN_PASSWORD: Joi.string().min(8).default('Admin123!'),
 })
