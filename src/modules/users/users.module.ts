@@ -19,6 +19,7 @@ import { OtpRepositoryImpl } from './external-system/repositories/otp.repository
 
 @Module({
   imports: [
+    ConfigModule,
     TypeOrmModule.forFeature([User]),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),
