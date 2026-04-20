@@ -41,7 +41,7 @@ export class RolesRepositoryImpl implements RolesRepository {
   async hasPermission(roleId: string, resourceSlug: string, action: string): Promise<boolean> {
     const count = await this.rolesRepo
       .createQueryBuilder('role')
-      .innerJoin('role.permissions', 'permissions')
+      .innerJoin('role.permissions', 'permission')
       .innerJoin('permission.resource', 'resource')
       .where('role.id = :roleId', { roleId })
       .andWhere('resource.slug = :resourceSlug', { resourceSlug })

@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { RolesService } from "../../business/services/roles.service";
-import { Observable } from "rxjs";
 import { PERMISSIONS_KEY, RequiredPermission } from "../decorators/requiere-permissions.decorator";
 
 @Injectable()
@@ -22,7 +21,8 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const { user } = context.switchToHttp().getRequest();
-    if (!user?.roleId) {
+
+    if (!user?.role?.id) {
       throw new ForbiddenException('No role assigned');
     }
 
