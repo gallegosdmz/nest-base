@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -16,11 +16,15 @@ import { AuthRepositoryImpl } from './external-system/repositories/auth.reposito
 import { UsersRepositoryImpl } from './external-system/repositories/users.repository.impl';
 import { UsersValidatorImpl } from './external-system/repositories/users.validator.impl';
 import { OtpRepositoryImpl } from './external-system/repositories/otp.repository.impl';
+import { JwtStrategy } from './external-system/strategies/jwt.strategy';
+import { RbacModule } from '../rbac/rbac.module';
 
 @Module({
   imports: [
     ConfigModule,
     TypeOrmModule.forFeature([User]),
+
+    forwardRef(() => RbacModule),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),
 
@@ -30,7 +34,7 @@ import { OtpRepositoryImpl } from './external-system/repositories/otp.repository
       useFactory: (configService: ConfigService) => ({
         secret: configService.getOrThrow<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN', '24h') as any,
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN', '72h') as any,
         },
       }),
     }),
@@ -39,6 +43,7 @@ import { OtpRepositoryImpl } from './external-system/repositories/otp.repository
   providers: [
     AuthService,
     UsersService,
+    JwtStrategy,
     { provide: 'AuthRepository', useClass: AuthRepositoryImpl },
     { provide: 'UsersRepository', useClass: UsersRepositoryImpl },
     { provide: 'UsersValidator', useClass: UsersValidatorImpl },

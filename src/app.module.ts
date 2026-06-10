@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggerModule } from './shared/logger/logger.module';
 import { HttpLoggerInterceptor } from './shared/interceptors/http-logger.interceptor';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -7,6 +7,8 @@ import { envValidationSchema } from './config/env.validation';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
 import { RbacModule } from './modules/rbac/rbac.module';
+import { JwtAuthGuard } from './modules/users/application/guards/jwt-auth.guard';
+import { PermissionsGuard } from './modules/rbac/application/guards/permissions.guard';
 
 @Module({
   imports: [
@@ -38,6 +40,14 @@ import { RbacModule } from './modules/rbac/rbac.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpLoggerInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
     },
   ],
 })

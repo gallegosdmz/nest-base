@@ -5,12 +5,15 @@ import { GetUser } from "../decorators/get-user.decorator";
 import type { IUser } from "../../business/entities/User";
 import { PaginationDto } from "src/shared/dtos/pagination.dto";
 import { UpdateUserDto } from "../dto/update-user.dto";
+import { RequirePermissions } from "src/modules/rbac/application/decorators/requiere-permissions.decorator";
+import { Action } from "src/modules/rbac/business/entities/Action";
 
 @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @RequirePermissions({ resource: 'users', action: Action.READ })
   @Get()
   findAll(
     @Query() paginationDto: PaginationDto,
@@ -25,6 +28,7 @@ export class UsersController {
     return this.usersService.findOne(user.id ?? '');
   }
 
+  @RequirePermissions({ resource: 'users', action: Action.READ })
   @Get(':id')
   findOne(
     @Param('id') id: string,
@@ -32,6 +36,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @RequirePermissions({ resource: 'users', action: Action.UPDATE })
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -41,6 +46,7 @@ export class UsersController {
     return this.usersService.update(id, updateDto, user);
   }
 
+  @RequirePermissions({ resource: 'users', action: Action.DELETE })
   @Delete(':id')
   remove(
     @Param('id') id: string,

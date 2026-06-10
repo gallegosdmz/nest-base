@@ -10,6 +10,7 @@ export const envValidationSchema = Joi.object({
 
   // JWT
   JWT_SECRET: Joi.string().required(),
+  JWT_EXPIRES_IN: Joi.string().default('72h'),
 
   // App
   PORT: Joi.number().default(3000),
@@ -17,4 +18,9 @@ export const envValidationSchema = Joi.object({
   // Admin seed (optional)
   ADMIN_EMAIL: Joi.string().email().default('admin@admin.com'),
   ADMIN_PASSWORD: Joi.string().min(8).default('Admin123!'),
+
+  // Twilio (optional - OTP feature)
+  TWILIO_ACCOUNT_SID: Joi.string().optional(),
+  TWILIO_AUTH_TOKEN: Joi.string().optional(),
+  TWILIO_VERIFY_SERVICE_SID: Joi.string().optional(),
 })

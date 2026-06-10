@@ -4,6 +4,7 @@ import { CreateUserDto } from "../dto/create-user.dto";
 import { LoginDto } from "../dto/login-user.dto";
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { GetUser } from "../decorators/get-user.decorator";
+import { Public } from "../decorators/public.decorator";
 import type { IUser } from "../../business/entities/User";
 
 @Controller('auth')
@@ -12,6 +13,7 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
+  @Public()
   @Post('register')
   create(
     @Body() createDto: CreateUserDto,
@@ -19,6 +21,7 @@ export class AuthController {
     return this.authService.create(createDto);
   }
 
+  @Public()
   @Post('login')
   login(
     @Body() loginDto: LoginDto,
@@ -34,6 +37,7 @@ export class AuthController {
     return this.authService.checkAuthStatus(user);
   }
 
+  @Public()
   @Post('send-otp')
   sendOtp(
     @Body('phone') phone: string,
@@ -41,6 +45,7 @@ export class AuthController {
     return this.authService.sendOtp(phone);
   }
 
+  @Public()
   @Post('verify-otp')
   verifyOtp(
     @Body('phone') phone: string,

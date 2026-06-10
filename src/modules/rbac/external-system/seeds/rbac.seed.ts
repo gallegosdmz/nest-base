@@ -12,42 +12,18 @@ import * as bcrypt from 'bcrypt';
 const RBAC_CONFIG = {
   resources: [
     { name: 'Users', slug: 'users' },
-    { name: 'Orders', slug: 'orders' },
-    { name: 'Shipments', slug: 'shipments' },
-    { name: 'Notifications', slug: 'notifications' },
   ],
   roles: {
     admin: {
       description: 'Full system access',
       permissions: {
         users: [Action.CREATE, Action.READ, Action.UPDATE, Action.DELETE],
-        orders: [Action.CREATE, Action.READ, Action.UPDATE, Action.DELETE],
-        shipments: [Action.CREATE, Action.READ, Action.UPDATE, Action.DELETE],
-        notifications: [Action.CREATE, Action.READ, Action.UPDATE, Action.DELETE],
       },
     },
-    sales: {
-      description: 'Sales team member',
+    user: {
+      description: 'Standard user with read-only access',
       permissions: {
-        orders: [Action.CREATE, Action.READ, Action.UPDATE],
-        shipments: [Action.READ],
-        notifications: [Action.READ],
-      },
-    },
-    purchases: {
-      description: 'Purchases team member',
-      permissions: {
-        orders: [Action.READ],
-        shipments: [Action.CREATE, Action.READ, Action.UPDATE],
-        notifications: [Action.READ],
-      },
-    },
-    client: {
-      description: 'External client',
-      permissions: {
-        orders: [Action.CREATE, Action.READ],
-        shipments: [Action.READ],
-        notifications: [Action.READ],
+        users: [Action.READ],
       },
     },
   },

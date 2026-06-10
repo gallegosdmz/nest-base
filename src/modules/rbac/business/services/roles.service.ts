@@ -13,6 +13,13 @@ export class RolesService {
     return this.rolesRepo.findAll();
   }
 
+  async findOneById(id: string): Promise<IRole> {
+    const role = await this.rolesRepo.findOneById(id);
+    if (!role) throw new NotFoundException(`Role: ${id}, not found`);
+
+    return role;
+  }
+
   async findOneByName(name: string): Promise<IRole> {
     const role = await this.rolesRepo.findOneByName(name);
     if (!role) throw new NotFoundException(`Role: ${name}, not found`);

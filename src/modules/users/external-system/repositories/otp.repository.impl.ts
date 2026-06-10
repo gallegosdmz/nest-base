@@ -5,22 +5,34 @@ import { Twilio } from "twilio";
 
 @Injectable()
 export class OtpRepositoryImpl implements OtpRepository {
-  private readonly client: Twilio;
-  private readonly serviceSid: string;
+  private client?: Twilio;
+  private serviceSid?: string;
   private readonly logger = new Logger(OtpRepositoryImpl.name);
 
-  constructor(private readonly configService: ConfigService) {
-    const accountSid = this.configService.getOrThrow<string>('TWILIO_ACCOUNT_SID');
-    const authToken = this.configService.getOrThrow<string>('TWILIO_AUTH_TOKEN');
-    
-    this.serviceSid = this.configService.getOrThrow<string>('TWILIO_VERIFY_SERVICE_SID');
+  constructor(private readonly configService: ConfigService) {}
+
+  private getClient(): { client: Twilio; serviceSid: string } {
+    if (this.client && this.serviceSid)
+      return { client: this.client, serviceSid: this.serviceSid };
+
+    const accountSid = this.configService.get<string>('TWILIO_ACCOUNT_SID');
+    const authToken = this.configService.get<string>('TWILIO_AUTH_TOKEN');
+    const serviceSid = this.configService.get<string>('TWILIO_VERIFY_SERVICE_SID');
+
+    if (!accountSid || !authToken || !serviceSid)
+      throw new InternalServerErrorException('OTP feature is not configured (missing TWILIO_* env vars)');
+
     this.client = new Twilio(accountSid, authToken);
+    this.serviceSid = serviceSid;
+
+    return { client: this.client, serviceSid: this.serviceSid };
   }
 
   async sendOtp(phone: string): Promise<{ message: string; }> {
     try {
-      await this.client.verify.v2
-        .services(this.serviceSid)
+      const { client, serviceSid } = this.getClient();
+      await client.verify.v2
+        .services(serviceSid)
         .verifications.create({
           to: phone,
           channel: 'sms',
@@ -35,8 +47,9 @@ export class OtpRepositoryImpl implements OtpRepository {
 
   async verifyOtp(phone: string, code: string): Promise<{ verified: boolean; }> {
     try {
-      const verification = await this.client.verify.v2
-        .services(this.serviceSid)
+      const { client, serviceSid } = this.getClient();
+      const verification = await client.verify.v2
+        .services(serviceSid)
         .verificationChecks.create({
           to: phone,
           code,

@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength } from "class-validator";
+import { IsEmail, IsOptional, IsString, IsUUID, MinLength } from "class-validator";
 import { IsMexicanPhone } from "src/shared/decorators";
 
 export class CreateUserDto {
@@ -19,5 +19,9 @@ export class CreateUserDto {
   lastName: string;
 
   @IsEmail()
-  email: string; 
+  email: string;
+
+  @IsUUID()
+  @IsOptional()
+  roleId?: string;
 }

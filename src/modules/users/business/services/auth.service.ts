@@ -8,6 +8,8 @@ import * as bcrypt from 'bcrypt';
 import { IAuth } from "../entities/Auth";
 import { LoginDto } from "../../application/dto/login-user.dto";
 import { IUser } from "../entities/User";
+import { RolesService } from "src/modules/rbac/business/services/roles.service";
+import { IRole } from "src/modules/rbac/business/entities/Role";
 
 @Injectable()
 export class AuthService {
@@ -23,16 +25,28 @@ export class AuthService {
 
     @Inject('UsersRepository')
     private readonly usersRepo: UsersRepository,
+
+    private readonly rolesService: RolesService,
   ) {}
 
   async create(createDto: CreateUserDto): Promise<IAuth> {
-    const { password, ...data } = createDto;
-    
+    const { password, roleId, ...data } = createDto;
+
     if (data.phone)
       await this.usersValidator.validatePhoneUniqueness(data.phone);
 
     await this.usersValidator.validateEmailUniqueness(data.email);
-    return this.authRepo.create({ ...data, password: bcrypt.hashSync(password, 10) });
+
+    let role: IRole | undefined;
+    if (roleId)
+      role = await this.rolesService.findOneById(roleId);
+
+    return this.authRepo.create({
+      ...data,
+      role,
+      roleId: role?.id,
+      password: bcrypt.hashSync(password, 10),
+    });
   }
 
   async login(loginDto: LoginDto): Promise<IAuth> {

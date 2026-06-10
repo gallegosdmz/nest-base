@@ -23,6 +23,10 @@ export class RolesRepositoryImpl implements RolesRepository {
     }
   }
 
+  async findOneById(id: string): Promise<IRole | null> {
+    return this.rolesRepo.findOne({ where: { id } });
+  }
+
   async findOneByName(name: string): Promise<IRole | null> {
     return this.rolesRepo.findOne({ where: { name }});
   }
