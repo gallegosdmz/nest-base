@@ -1,4 +1,4 @@
-import { IMeta } from "src/shared/interfaces/Meta";
+import { IMeta } from "../../../../shared/interfaces/Meta";
 import { IUser } from "../entities/User";
 
 export interface UsersRepository {

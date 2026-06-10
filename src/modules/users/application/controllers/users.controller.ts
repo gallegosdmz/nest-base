@@ -3,10 +3,10 @@ import { ApiBearerAuth } from "@nestjs/swagger";
 import { UsersService } from "../../business/services/users.service";
 import { GetUser } from "../decorators/get-user.decorator";
 import type { IUser } from "../../business/entities/User";
-import { PaginationDto } from "src/shared/dtos/pagination.dto";
 import { UpdateUserDto } from "../dto/update-user.dto";
-import { RequirePermissions } from "src/modules/rbac/application/decorators/requiere-permissions.decorator";
-import { Action } from "src/modules/rbac/business/entities/Action";
+import { Action } from "../../../rbac/business/entities/Action";
+import { RequirePermissions } from "../../../rbac/application/decorators/requiere-permissions.decorator";
+import { PaginationDto } from "../../../../shared/dtos/pagination.dto";
 
 @ApiBearerAuth()
 @Controller('users')

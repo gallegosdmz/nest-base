@@ -1,10 +1,10 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type { UsersRepository } from "../repositories/users.repository";
 import type { UsersValidator } from "../repositories/users.validator";
-import { PaginationDto } from "src/shared/dtos/pagination.dto";
 import { IUser } from "../entities/User";
-import { IMeta } from "src/shared/interfaces/Meta";
 import { UpdateUserDto } from "../../application/dto/update-user.dto";
+import { IMeta } from "../../../../shared/interfaces/Meta";
+import { PaginationDto } from "../../../../shared/dtos/pagination.dto";
 
 @Injectable()
 export class UsersService {

@@ -5,9 +5,9 @@ import { Repository } from 'typeorm';
 import { Resource } from '../entities/resource.entity';
 import { Role } from '../entities/role.entity';
 import { Permission } from '../entities/permission.entity';
-import { User } from 'src/modules/users/external-system/entities/user.entity';
 import { Action } from '../../business/entities/Action';
 import * as bcrypt from 'bcrypt';
+import { User } from '../../../users/external-system/entities/user.entity';
 
 const RBAC_CONFIG = {
   resources: [

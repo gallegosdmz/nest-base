@@ -1,4 +1,4 @@
-import { JwtPayload } from "src/shared/interfaces/Jwt-payload.interface";
+import { JwtPayload } from "../../../../shared/interfaces/Jwt-payload.interface";
 import { IAuth } from "../entities/Auth";
 import { IUser } from "../entities/User";
 

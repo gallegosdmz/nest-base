@@ -8,8 +8,8 @@ import * as bcrypt from 'bcrypt';
 import { IAuth } from "../entities/Auth";
 import { LoginDto } from "../../application/dto/login-user.dto";
 import { IUser } from "../entities/User";
-import { RolesService } from "src/modules/rbac/business/services/roles.service";
-import { IRole } from "src/modules/rbac/business/entities/Role";
+import { RolesService } from "../../../rbac/business/services/roles.service";
+import { IRole } from "../../../rbac/business/entities/Role";
 
 @Injectable()
 export class AuthService {

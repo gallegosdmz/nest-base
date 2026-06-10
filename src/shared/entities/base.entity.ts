@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "src/modules/users/external-system/entities/user.entity";
+import { User } from "../../modules/users/external-system/entities/user.entity";
 
 export class BaseEntity {
   @PrimaryGeneratedColumn('uuid')

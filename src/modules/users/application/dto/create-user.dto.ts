@@ -1,6 +1,5 @@
 import { IsEmail, IsOptional, IsString, IsUUID, MinLength } from "class-validator";
-import { IsMexicanPhone } from "src/shared/decorators";
-
+import { IsMexicanPhone } from "../../../../shared/decorators";
 export class CreateUserDto {
   @IsMexicanPhone()
   @IsOptional()

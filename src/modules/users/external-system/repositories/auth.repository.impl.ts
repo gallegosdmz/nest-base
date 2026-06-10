@@ -6,9 +6,9 @@ import { User } from "../entities/user.entity";
 import { Repository } from "typeorm";
 import { IAuth } from "../../business/entities/Auth";
 import { IUser } from "../../business/entities/User";
-import { JwtPayload } from "src/shared/interfaces/Jwt-payload.interface";
 
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from "../../../../shared/interfaces/Jwt-payload.interface";
 
 @Injectable()
 export class AuthRepositoryImpl implements AuthRepository {

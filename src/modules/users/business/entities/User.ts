@@ -1,5 +1,4 @@
-import { IRole } from "src/modules/rbac/business/entities/Role";
-
+import { IRole } from "../../../rbac/business/entities/Role";
 export interface IUser {
   id?: string;
   phone?: string;

@@ -1,6 +1,6 @@
-import { Role } from 'src/modules/rbac/external-system/entities/role.entity';
-import { BaseEntity } from 'src/shared/entities/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BaseEntity } from '../../../../shared/entities/base.entity';
+import { Role } from '../../../rbac/external-system/entities/role.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
